@@ -25,6 +25,7 @@ import (
 	"io"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -39,7 +40,7 @@ func (s *composeService) injectSecrets(ctx context.Context, project *types.Proje
 		if secret.Target == "" {
 			secret.Target = secretsBaseDir + secret.Source
 		} else if !isAbsTarget(secret.Target) {
-			secret.Target = secretsBaseDir + secret.Target
+			secret.Target = path.Join(secretsBaseDir, secret.Target)
 		}
 
 		definedSecret := project.Secrets[secret.Source]
@@ -92,7 +93,7 @@ func (s *composeService) injectConfigs(ctx context.Context, project *types.Proje
 		if config.Target == "" {
 			config.Target = configsBaseDir + config.Source
 		} else if !isAbsTarget(config.Target) {
-			config.Target = configsBaseDir + config.Target
+			config.Target = path.Join(configsBaseDir, config.Target)
 		}
 
 		definedConfig := project.Configs[config.Source]
